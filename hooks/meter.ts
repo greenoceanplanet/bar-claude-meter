@@ -42,6 +42,12 @@ const WINDOW_MS: Record<string, number> = {
 
 export const BAR_WIDTH = 8
 
+/** Bar cells for a terminal this wide: about one per 15 columns, 4 to 16; BAR_WIDTH when unknown. */
+export function barWidthFor(columns: number | undefined): number {
+  if (!columns) return BAR_WIDTH
+  return Math.min(16, Math.max(4, Math.round(columns / 15)))
+}
+
 /** Milliseconds until reset, or undefined. */
 export function msLeft(resetsAt: string | undefined, now: Date): number | undefined {
   if (!resetsAt) return undefined
@@ -87,7 +93,7 @@ export function stackedBar(quotaLeft: number, timeLeft: number | undefined, widt
 /** What the band draws for one window. */
 export type Meter = { label: string; cells: Cell[]; percentLeft: number; timeLeft?: string }
 
-export function meters(limits: RateLimit[], now: Date): Meter[] {
+export function meters(limits: RateLimit[], now: Date, width = BAR_WIDTH): Meter[] {
   return sortLimits(limits).flatMap((limit) => {
     const window = WINDOW_MS[limit.kind]
     if (!window) return []
@@ -96,7 +102,7 @@ export function meters(limits: RateLimit[], now: Date): Meter[] {
     return [
       {
         label: labelFor(limit.kind),
-        cells: barCells(left / 100, ms === undefined ? undefined : ms / window),
+        cells: barCells(left / 100, ms === undefined ? undefined : ms / window, width),
         percentLeft: Math.round(left),
         timeLeft: ms === undefined ? undefined : formatLeft(ms),
       },

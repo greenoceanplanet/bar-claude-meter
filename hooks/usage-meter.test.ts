@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { prettyModel, contextMeter, dueToasts, formatTokens, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
+import { barWidthFor, prettyModel, contextMeter, dueToasts, formatTokens, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
 
 // Fixed clock: reports UTC so results do not depend on the machine timezone.
 const clock: Clock = (d) =>
@@ -111,4 +111,11 @@ test('model names', () => {
   expect(prettyModel('claude-haiku-4-5-20251001')).toBe('Haiku 4.5')
   expect(prettyModel('claude-fable-5-1')).toBe('Fable 5.1')
   expect(prettyModel('gpt-x')).toBe('gpt-x')
+})
+
+test('bar width follows the terminal', () => {
+  expect(barWidthFor(undefined)).toBe(8)
+  expect(barWidthFor(40)).toBe(4)
+  expect(barWidthFor(120)).toBe(8)
+  expect(barWidthFor(300)).toBe(16)
 })

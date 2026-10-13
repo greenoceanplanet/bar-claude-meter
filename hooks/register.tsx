@@ -1,6 +1,6 @@
 import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
-import { contextMeter, prettyModel, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
+import { barWidthFor, contextMeter, prettyModel, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
 
 const QUOTA_COLOR = '#D97757'
 const TIME_COLOR = '#808080'
@@ -64,7 +64,7 @@ export const register: Register = (on) => {
 
   // Drawn in place of the hint line under the prompt; the engine's hint text follows, dim.
   on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
-    const list = meters(await read($, limitsAtom), new Date(await $.clock.now()))
+    const list = meters(await read($, limitsAtom), new Date(await $.clock.now()), barWidthFor(e.viewport?.columns))
     const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
     const hint = e.props.hint.replace(/\s*\(shift\+tab to cycle\)/g, '')
       .replace(/\s*·?\s*← for agents/g, '')
