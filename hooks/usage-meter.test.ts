@@ -17,18 +17,18 @@ const week = (p: number): RateLimit => ({ kind: 'seven_day', percentUsed: p, res
 const NOW = new Date('2026-10-02T16:10:00Z')
 
 test('stacked bar: top = quota left, bottom = time left', () => {
-  expect(stackedBar(1, 1)).toBe('▕██████████▏')
-  expect(stackedBar(0.7, 0.5)).toBe('▕█████▀▀   ▏')
-  expect(stackedBar(0.3, 0.5)).toBe('▕███▄▄     ▏')
-  expect(stackedBar(0.4, undefined)).toBe('▕▀▀▀▀      ▏')
-  expect(stackedBar(-1, 2)).toBe('▕▄▄▄▄▄▄▄▄▄▄▏')
+  expect(stackedBar(1, 1)).toBe('▕⠶⠶⠶⠶⠶⠶⠶⠶⠶⠶▏')
+  expect(stackedBar(0.7, 0.5)).toBe('▕⠶⠶⠶⠶⠶⠒⠒⠀⠀⠀▏')
+  expect(stackedBar(0.3, 0.5)).toBe('▕⠶⠶⠶⠤⠤⠀⠀⠀⠀⠀▏')
+  expect(stackedBar(0.4, undefined)).toBe('▕⠒⠒⠒⠒⠀⠀⠀⠀⠀⠀▏')
+  expect(stackedBar(-1, 2)).toBe('▕⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤▏')
 })
 
 test('status text shapes', () => {
   expect(statusText([week(41), five(30)], clock, NOW)).toBe(
-    '5h ▕█████▀▀   ▏ 70% 2h30m  week ▕███▀▀▀    ▏ 59% 2d7h',
+    '5h ▕⠶⠶⠶⠶⠶⠒⠒⠀⠀⠀▏ 70% 2h30m  week ▕⠶⠶⠶⠖⠒⠒⠀⠀⠀⠀▏ 59% 2d7h',
   )
-  expect(statusText([five(30, undefined)], clock, NOW)).toBe('5h ▕▀▀▀▀▀▀▀   ▏ 70%')
+  expect(statusText([five(30, undefined)], clock, NOW)).toBe('5h ▕⠒⠒⠒⠒⠒⠒⠒⠀⠀⠀▏ 70%')
   expect(statusText([{ kind: 'spend_limit', percentUsed: 120 }], clock, NOW)).toBe('spend 120%')
   expect(statusText([], clock, NOW)).toBeUndefined()
 })
@@ -99,5 +99,5 @@ test('a measure event sets the status line', async ($, on) => {
     rateLimits: [{ kind: 'seven_day', percentUsed: 41 }],
     changed: ['rateLimits'],
   })
-  expect(seen).toEqual([expect.stringMatching(/^week ▕[▀ ]{10}▏ 59%$/)])
+  expect(seen).toEqual([expect.stringMatching(/^week ▕[⠒⠐⠀]{10}▏ 59%$/)])
 })
