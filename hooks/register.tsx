@@ -57,8 +57,8 @@ export const register: Register = (on) => {
     return yield* next(e)
   })
 
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    if (e.props.hasSurvey) return next(e)
+  // Drawn in place of the hint line under the prompt; the engine's hint text follows, dim.
+  on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
     const list = meters(await read($, limitsAtom), new Date(await $.clock.now()))
     const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
     const model = await read($, modelAtom)
@@ -89,14 +89,11 @@ export const register: Register = (on) => {
         ))}
         {ctx ? (
           <Box key="ctx">
-            <Text dimColor>{(list.length > 0 || model ? '  ' : '') + 'ctx'} ▕</Text>
-            <Text color={ctxColor}>{'█'.repeat(ctx.filled)}</Text>
-            <Text>{' '.repeat(ctx.width - ctx.filled)}</Text>
-            <Text dimColor>▏ </Text>
+            <Text dimColor>{(list.length > 0 || model ? '  ' : '') + 'ctx '}</Text>
             <Text color={ctxColor}>{ctx.percent}%</Text>
-            <Text dimColor> {ctx.text}</Text>
           </Box>
         ) : null}
+        {e.props.hint ? <Text dimColor>{'  ' + e.props.hint}</Text> : null}
       </Box>
     )
   })
