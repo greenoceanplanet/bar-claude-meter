@@ -1,5 +1,5 @@
 {
-  "name": "usage-meter",
+  "name": "claude-meter",
   "version": "0.1.0",
   "description": "Shows your Claude 5 hour and weekly rate limits in the status line and warns at 80% and 90%.",
   "author": { "name": "Murat Can Yuksel", "url": "https://github.com/0xGondarxyz" },
