@@ -115,7 +115,7 @@ test('model names', () => {
 
 test('bar width follows the terminal', () => {
   expect(barWidthFor(undefined)).toBe(8)
-  expect(barWidthFor(40)).toBe(4)
-  expect(barWidthFor(120)).toBe(8)
+  expect(barWidthFor(40)).toBe(5)
+  expect(barWidthFor(120)).toBe(12)
   expect(barWidthFor(300)).toBe(16)
 })

@@ -5,7 +5,7 @@ import { barWidthFor, contextMeter, prettyModel, dueToasts, glyph, localClock, m
 const QUOTA_COLOR = '#D97757'
 const TIME_COLOR = '#808080'
 /** Terminal width from which each bar also shows its quota % and time left. */
-const NUMBERS_MIN_COLUMNS = 110
+const NUMBERS_MIN_COLUMNS = 88
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
 
@@ -29,12 +29,12 @@ export const register: Register = (on) => {
       const { rateLimits, context } = await $.session.usage()
       if (rateLimits.length > 0) await update($, limitsAtom, () => rateLimits)
       await update($, contextAtom, () => context)
-    } catch {}
+    } catch { }
     try {
       const model = await $.session.model()
       await update($, modelAtom, () => model)
       $.ui.invalidate('ui.render')
-    } catch {}
+    } catch { }
     // Keep the time bar moving between measurements.
     $.clock.every(60_000, () => $.ui.invalidate('ui.render'))
     return next(e)
@@ -46,7 +46,7 @@ export const register: Register = (on) => {
       await update($, contextAtom, () => e.context)
       $.ui.invalidate('ui.render')
       for (const text of dueToasts(e.rateLimits, fired, localClock)) $.ui.toast(text)
-    } catch {}
+    } catch { }
     return next(e)
   })
 
@@ -57,7 +57,7 @@ export const register: Register = (on) => {
         await update($, modelAtom, () => e.model)
         await update($, effortAtom, () => (e.effort === undefined ? null : String(e.effort)))
         $.ui.invalidate('ui.render')
-      } catch {}
+      } catch { }
     }
     return yield* next(e)
   })
