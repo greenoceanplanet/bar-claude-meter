@@ -26,9 +26,9 @@ test('stacked bar: top = quota left, bottom = time left', () => {
 
 test('status text shapes', () => {
   expect(statusText([week(41), five(30)], clock, NOW)).toBe(
-    '5h ▕███▀  ▏ 70% 2h30m  week ▕██▀▀  ▏ 59% 2d7h',
+    '5h ▕████▀▀  ▏ 70% 2h30m  week ▕███▀▀   ▏ 59% 2d7h',
   )
-  expect(statusText([five(30, undefined)], clock, NOW)).toBe('5h ▕▀▀▀▀  ▏ 70%')
+  expect(statusText([five(30, undefined)], clock, NOW)).toBe('5h ▕▀▀▀▀▀▀  ▏ 70%')
   expect(statusText([{ kind: 'spend_limit', percentUsed: 120 }], clock, NOW)).toBe('spend 120%')
   expect(statusText([], clock, NOW)).toBeUndefined()
 })
@@ -90,8 +90,8 @@ test('windows are independent; no time drops the clause', () => {
 test('band meters: 5h and week only, sorted', () => {
   const list = meters([{ kind: 'spend_limit', percentUsed: 5 }, week(41), five(30)], NOW)
   expect(list.map((m) => [m.label, m.cells.map(glyph).join(''), m.percentLeft, m.timeLeft])).toEqual([
-    ['5h', '███▀  ', 70, '2h30m'],
-    ['week', '██▀▀  ', 59, '2d7h'],
+    ['5h', '████▀▀  ', 70, '2h30m'],
+    ['week', '███▀▀   ', 59, '2d7h'],
   ])
   expect(meters([five(30, undefined)], NOW)[0]?.timeLeft).toBeUndefined()
 })
