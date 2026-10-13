@@ -3,7 +3,7 @@ import type { Register } from 'claude-code'
 import { contextMeter, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
 
 const QUOTA_COLOR = '#D97757'
-const TIME_COLOR = '#000000'
+const TIME_COLOR = '#808080'
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
 
@@ -48,7 +48,7 @@ export const register: Register = (on) => {
     const ctxColor = ctx && ctx.percent >= 80 ? CTX_WARN_COLOR : CTX_COLOR
     const { Box, Text } = $.ui.resolve(e)
     return (
-      <Box>
+      <Box marginBottom={-1}>
         {list.map((m, i) => (
           <Box key={m.label}>
             <Text dimColor>{(i > 0 ? '  ' : '') + m.label} ▕</Text>
