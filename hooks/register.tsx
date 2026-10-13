@@ -76,21 +76,18 @@ export const register: Register = (on) => {
         ) : null}
         {list.map((m, i) => (
           <Box key={m.label}>
-            <Text dimColor>{(i > 0 || model ? '  ' : '') + m.label} ▕</Text>
+            <Text dimColor>{(i > 0 || model ? '  ' : '') + (m.label === 'week' ? '7d' : m.label)}▕</Text>
             {m.cells.map((c, j) => (
               <Text key={String(j)} {...cellColors(c)}>
                 {c.top && c.bottom ? '▀' : glyph(c)}
               </Text>
             ))}
-            <Text dimColor>▏ </Text>
-            <Text color={QUOTA_COLOR}>{m.percentLeft}%</Text>
-            {m.timeLeft ? <Text color={TIME_COLOR}> {m.timeLeft}</Text> : null}
+            <Text dimColor>▏</Text>
           </Box>
         ))}
         {ctx ? (
           <Box key="ctx">
-            <Text dimColor>{(list.length > 0 || model ? '  ' : '') + 'ctx '}</Text>
-            <Text color={ctxColor}>{ctx.percent}%</Text>
+            <Text color={ctxColor}>{(list.length > 0 || model ? '  ' : '') + `C${ctx.percent}%`}</Text>
           </Box>
         ) : null}
         {e.props.hint ? <Text dimColor>{'  ' + e.props.hint}</Text> : null}
