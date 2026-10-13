@@ -2,8 +2,8 @@ import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
 import { contextMeter, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
 
-const QUOTA_COLOR = '#4FA3FF'
-const TIME_COLOR = '#FF9F43'
+const QUOTA_COLOR = '#D97757'
+const TIME_COLOR = '#000000'
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
 
