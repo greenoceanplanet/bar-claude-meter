@@ -42,10 +42,10 @@ const WINDOW_MS: Record<string, number> = {
 
 export const BAR_WIDTH = 8
 
-/** Bar cells for a terminal this wide: about one per 10 columns, 5 to 16; BAR_WIDTH when unknown. */
+/** Bar cells for a terminal this wide: about one per 9 columns, 5 to 10; BAR_WIDTH when unknown. */
 export function barWidthFor(columns: number | undefined): number {
   if (!columns) return BAR_WIDTH
-  return Math.min(16, Math.max(5, Math.round(columns / 10)))
+  return Math.min(10, Math.max(5, Math.round(columns / 9)))
 }
 
 /** Milliseconds until reset, or undefined. */
