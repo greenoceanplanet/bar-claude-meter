@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { dueToasts, formatLeft, stackedBar, statusText, type Clock, type RateLimit } from './meter'
+import { dueToasts, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
 
 // Fixed clock: reports UTC so results do not depend on the machine timezone.
 const clock: Clock = (d) =>
@@ -87,17 +87,11 @@ test('windows are independent; no time drops the clause', () => {
   ])
 })
 
-test('a measure event sets the status line', async ($, on) => {
-  const seen: Array<string | undefined> = []
-  on('session.measure', (_$, e) => ({ changed: e.changed }))
-  on('ui.status', (_$, e) => {
-    seen.push(e.text)
-    return { value: undefined } as never
-  })
-  await $.session.measure({
-    context: {} as never,
-    rateLimits: [{ kind: 'seven_day', percentUsed: 41 }],
-    changed: ['rateLimits'],
-  })
-  expect(seen).toEqual([expect.stringMatching(/^week ▕[▀ ]{10}▏ 59%$/)])
+test('band meters: 5h and week only, sorted', () => {
+  const list = meters([{ kind: 'spend_limit', percentUsed: 5 }, week(41), five(30)], NOW)
+  expect(list.map((m) => [m.label, m.cells.map(glyph).join(''), m.percentLeft, m.timeLeft])).toEqual([
+    ['5h', '█████▀▀   ', 70, '2h30m'],
+    ['week', '███▀▀▀    ', 59, '2d7h'],
+  ])
+  expect(meters([five(30, undefined)], NOW)[0]?.timeLeft).toBeUndefined()
 })

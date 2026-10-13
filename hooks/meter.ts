@@ -61,21 +61,47 @@ export function formatLeft(ms: number): string {
   return `${m}m`
 }
 
+/** One bar cell: whether the top (quota) and bottom (time) bars reach it. */
+export type Cell = { top: boolean; bottom: boolean }
+
+/** Top = quota left, bottom = time left, each a fraction of the window. */
+export function barCells(quotaLeft: number, timeLeft: number | undefined, width = BAR_WIDTH): Cell[] {
+  const cells = (f: number) => Math.round(Math.min(1, Math.max(0, f)) * width)
+  const top = cells(quotaLeft)
+  const bottom = timeLeft === undefined ? -1 : cells(timeLeft)
+  return Array.from({ length: width }, (_, i) => ({ top: i < top, bottom: i < bottom }))
+}
+
+export function glyph(c: Cell): string {
+  return c.top && c.bottom ? '█' : c.top ? '▀' : c.bottom ? '▄' : ' '
+}
+
 /**
  * Two bars stacked in one row with half blocks: top = quota left, bottom = time left.
  * A trailing ▀ means quota outlasts time (on pace); a trailing ▄ means quota runs out first.
  */
 export function stackedBar(quotaLeft: number, timeLeft: number | undefined, width = BAR_WIDTH): string {
-  const cells = (f: number) => Math.round(Math.min(1, Math.max(0, f)) * width)
-  const top = cells(quotaLeft)
-  const bottom = timeLeft === undefined ? -1 : cells(timeLeft)
-  let out = ''
-  for (let i = 0; i < width; i++) {
-    const t = i < top
-    const b = i < bottom
-    out += t && b ? '█' : t ? '▀' : b ? '▄' : ' '
-  }
-  return `▕${out}▏`
+  return `▕${barCells(quotaLeft, timeLeft, width).map(glyph).join('')}▏`
+}
+
+/** What the band draws for one window. */
+export type Meter = { label: string; cells: Cell[]; percentLeft: number; timeLeft?: string }
+
+export function meters(limits: RateLimit[], now: Date): Meter[] {
+  return sortLimits(limits).flatMap((limit) => {
+    const window = WINDOW_MS[limit.kind]
+    if (!window) return []
+    const left = Math.max(0, 100 - limit.percentUsed)
+    const ms = msLeft(limit.resetsAt, now)
+    return [
+      {
+        label: labelFor(limit.kind),
+        cells: barCells(left / 100, ms === undefined ? undefined : ms / window),
+        percentLeft: Math.round(left),
+        timeLeft: ms === undefined ? undefined : formatLeft(ms),
+      },
+    ]
+  })
 }
 
 /** Status line text, or undefined to clear it. */

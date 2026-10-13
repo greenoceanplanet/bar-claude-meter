@@ -1,5 +1,5 @@
 {
-  "name": "claude-meter",
+  "name": "meter-js",
   "owner": {
     "name": "Murat Can Yuksel",
     "url": "https://github.com/0xGondarxyz"
@@ -7,7 +7,7 @@
   "description": "Shows your Claude rate limits in the status line and warns at 80% and 90%.",
   "plugins": [
     {
-      "name": "claude-meter",
+      "name": "meter-js",
       "source": "./",
       "description": "Shows your Claude 5 hour and weekly rate limits in the status line and warns at 80% and 90%.",
       "version": "0.1.0"
