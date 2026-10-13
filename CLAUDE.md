@@ -18,7 +18,7 @@ Claude 사용량(5시간/주간 rate limit)을 상태줄에 보여주는 `usage-
 - 폴더명은 한글 대신 영문: `잔량표시기` → `claude-meter` (변경 완료)
 - 플러그인/marketplace 이름은 `meter-js` (`claude-` 접두어는 Anthropic 예약이라 사용 불가). 폴더명은 claude-meter (원본 `usage-meter`와 충돌 방지)
 - 패키지 매니저는 가급적 pnpm, uv
-- 하단 상태줄($.ui.status)은 색 불가 → 입력창 아래 힌트줄(PromptHint)을 대신 그림(엔진 힌트는 뒤에 흐리게). 예전엔 AbovePrompt band 사용. band 바깥 Box에 음수 margin을 주면 band가 아예 안 보임. 입력창 위 빈 줄은 엔진 기본 간격이라 못 줄임
+- 하단 상태줄($.ui.status)은 색 불가 → 입력창 아래 힌트줄(PromptHint)을 대신 그림(엔진 힌트는 뒤에 흐리게). 예전엔 AbovePrompt band 사용. band 바깥 Box에 음수 margin을 주면 band가 아예 안 보임. 입력창 위 빈 줄은 엔진 기본 간격이라 못 줄임. atom 갱신만으로는 힌트줄이 다시 안 그려짐 → $.ui.invalidate("ui.render") 필요
 
 ## 다음 할 일
 1. ~~`.claude-plugin/*.json` 이름 → `meter-js`~~ (완료)

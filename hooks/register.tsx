@@ -31,9 +31,10 @@ export const register: Register = (on) => {
     try {
       const model = await $.session.model()
       await update($, modelAtom, () => model)
+      $.ui.invalidate('ui.render')
     } catch {}
     // Keep the time bar moving between measurements.
-    $.clock.every(60_000, () => update($, limitsAtom, (l) => [...l]))
+    $.clock.every(60_000, () => $.ui.invalidate('ui.render'))
     return next(e)
   })
 
@@ -41,6 +42,7 @@ export const register: Register = (on) => {
     try {
       await update($, limitsAtom, () => e.rateLimits)
       await update($, contextAtom, () => e.context)
+      $.ui.invalidate('ui.render')
       for (const text of dueToasts(e.rateLimits, fired, localClock)) $.ui.toast(text)
     } catch {}
     return next(e)
@@ -52,6 +54,7 @@ export const register: Register = (on) => {
       try {
         await update($, modelAtom, () => e.model)
         await update($, effortAtom, () => (e.effort === undefined ? null : String(e.effort)))
+        $.ui.invalidate('ui.render')
       } catch {}
     }
     return yield* next(e)

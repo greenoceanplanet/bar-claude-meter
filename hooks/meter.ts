@@ -40,7 +40,7 @@ const WINDOW_MS: Record<string, number> = {
   seven_day: 7 * 24 * 3600_000,
 }
 
-export const BAR_WIDTH = 6
+export const BAR_WIDTH = 8
 
 /** Milliseconds until reset, or undefined. */
 export function msLeft(resetsAt: string | undefined, now: Date): number | undefined {
