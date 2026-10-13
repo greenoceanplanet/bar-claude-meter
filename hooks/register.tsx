@@ -61,6 +61,7 @@ export const register: Register = (on) => {
   on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
     const list = meters(await read($, limitsAtom), new Date(await $.clock.now()))
     const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
+    const hint = e.props.hint.replace(/\s*\(shift\+tab to cycle\)/g, '').trim()
     const model = await read($, modelAtom)
     const effort = await read($, effortAtom)
     if (list.length === 0 && !ctx && !model) return next(e)
@@ -90,7 +91,7 @@ export const register: Register = (on) => {
             <Text color={ctxColor}>{(list.length > 0 || model ? '  ' : '') + `C${ctx.percent}%`}</Text>
           </Box>
         ) : null}
-        {e.props.hint ? <Text dimColor>{'  ' + e.props.hint}</Text> : null}
+        {hint ? <Text dimColor>{'  ' + hint}</Text> : null}
       </Box>
     )
   })
