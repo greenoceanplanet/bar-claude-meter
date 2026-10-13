@@ -166,3 +166,11 @@ export function contextMeter(
   const filled = Math.round((Math.min(100, Math.max(0, percent)) / 100) * width)
   return { filled, width, percent, text: `${formatTokens(ctx.tokens)}/${formatTokens(ctx.window)}` }
 }
+
+/** "claude-opus-5-5[1m]" → "Opus 5.5"; anything else as given. */
+export function prettyModel(id: string): string {
+  const m = /^claude-([a-z]+)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?/.exec(id)
+  if (!m) return id
+  const name = m[1]!.charAt(0).toUpperCase() + m[1]!.slice(1)
+  return m[3] ? `${name} ${m[2]}.${m[3]}` : `${name} ${m[2]}`
+}

@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { contextMeter, dueToasts, formatTokens, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
+import { prettyModel, contextMeter, dueToasts, formatTokens, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
 
 // Fixed clock: reports UTC so results do not depend on the machine timezone.
 const clock: Clock = (d) =>
@@ -103,4 +103,12 @@ test('context meter', () => {
   })
   expect(formatTokens(1_000_000)).toBe('1M')
   expect(formatTokens(850)).toBe('850')
+})
+
+test('model names', () => {
+  expect(prettyModel('claude-opus-5-5')).toBe('Opus 5.5')
+  expect(prettyModel('claude-sonnet-5-5[1m]')).toBe('Sonnet 5.5')
+  expect(prettyModel('claude-haiku-4-5-20251001')).toBe('Haiku 4.5')
+  expect(prettyModel('claude-fable-5-1')).toBe('Fable 5.1')
+  expect(prettyModel('gpt-x')).toBe('gpt-x')
 })
