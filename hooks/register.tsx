@@ -1,11 +1,14 @@
 import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
-import { dueToasts, glyph, localClock, meters, type Cell, type RateLimit } from './meter'
+import { contextMeter, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
 
 const QUOTA_COLOR = '#4FA3FF'
 const TIME_COLOR = '#FF9F43'
+const CTX_COLOR = '#7BD88F'
+const CTX_WARN_COLOR = '#FF5F5F'
 
 const limitsAtom = atom({ plugin: 'meter-js', key: 'limits' } as const, [] as RateLimit[])
+const contextAtom = atom({ plugin: 'meter-js', key: 'context' } as const, null as ContextUsage | null)
 const fired = new Map<string, number>()
 
 /** Top half takes the glyph color, bottom half the background, so each bar keeps its own color. */
@@ -19,8 +22,9 @@ function cellColors(c: Cell): { color?: string; backgroundColor?: string } {
 export const register: Register = (on) => {
   on('session.start', async ($, e, next) => {
     try {
-      const { rateLimits } = await $.session.usage()
+      const { rateLimits, context } = await $.session.usage()
       if (rateLimits.length > 0) await update($, limitsAtom, () => rateLimits)
+      await update($, contextAtom, () => context)
     } catch {}
     // Keep the time bar moving between measurements.
     $.clock.every(60_000, () => update($, limitsAtom, (l) => [...l]))
@@ -30,6 +34,7 @@ export const register: Register = (on) => {
   on('session.measure', async ($, e, next) => {
     try {
       await update($, limitsAtom, () => e.rateLimits)
+      await update($, contextAtom, () => e.context)
       for (const text of dueToasts(e.rateLimits, fired, localClock)) $.ui.toast(text)
     } catch {}
     return next(e)
@@ -38,7 +43,9 @@ export const register: Register = (on) => {
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     if (e.props.hasSurvey) return next(e)
     const list = meters(await read($, limitsAtom), new Date(await $.clock.now()))
-    if (list.length === 0) return next(e)
+    const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
+    if (list.length === 0 && !ctx) return next(e)
+    const ctxColor = ctx && ctx.percent >= 80 ? CTX_WARN_COLOR : CTX_COLOR
     const { Box, Text } = $.ui.resolve(e)
     return (
       <Box>
@@ -55,6 +62,16 @@ export const register: Register = (on) => {
             {m.timeLeft ? <Text color={TIME_COLOR}> {m.timeLeft}</Text> : null}
           </Box>
         ))}
+        {ctx ? (
+          <Box key="ctx">
+            <Text dimColor>{(list.length > 0 ? '  ' : '') + 'ctx'} ▕</Text>
+            <Text color={ctxColor}>{'█'.repeat(ctx.filled)}</Text>
+            <Text>{' '.repeat(ctx.width - ctx.filled)}</Text>
+            <Text dimColor>▏ </Text>
+            <Text color={ctxColor}>{ctx.percent}%</Text>
+            <Text dimColor> {ctx.text}</Text>
+          </Box>
+        ) : null}
       </Box>
     )
   })

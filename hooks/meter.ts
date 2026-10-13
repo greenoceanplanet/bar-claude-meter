@@ -146,3 +146,23 @@ export function dueToasts(limits: RateLimit[], fired: Map<string, number>, clock
   }
   return out
 }
+
+/** "850", "12k", "1.2M". */
+export function formatTokens(n: number): string {
+  if (n >= 1_000_000) return `${Math.round(n / 100_000) / 10}M`
+  if (n >= 1_000) return `${Math.round(n / 1_000)}k`
+  return String(n)
+}
+
+export type ContextUsage = { tokens?: number; window: number; percent?: number }
+
+/** What the band draws for the context window, or undefined before the first response. */
+export function contextMeter(
+  ctx: ContextUsage | undefined,
+  width = BAR_WIDTH,
+): { filled: number; width: number; percent: number; text: string } | undefined {
+  if (!ctx || ctx.tokens === undefined || !ctx.window) return undefined
+  const percent = ctx.percent ?? Math.round((ctx.tokens / ctx.window) * 100)
+  const filled = Math.round((Math.min(100, Math.max(0, percent)) / 100) * width)
+  return { filled, width, percent, text: `${formatTokens(ctx.tokens)}/${formatTokens(ctx.window)}` }
+}

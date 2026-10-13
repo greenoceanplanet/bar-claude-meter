@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { dueToasts, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
+import { contextMeter, dueToasts, formatTokens, formatLeft, glyph, meters, stackedBar, statusText, type Clock, type RateLimit } from './meter'
 
 // Fixed clock: reports UTC so results do not depend on the machine timezone.
 const clock: Clock = (d) =>
@@ -94,4 +94,13 @@ test('band meters: 5h and week only, sorted', () => {
     ['week', '███▀▀▀    ', 59, '2d7h'],
   ])
   expect(meters([five(30, undefined)], NOW)[0]?.timeLeft).toBeUndefined()
+})
+
+test('context meter', () => {
+  expect(contextMeter({ window: 200_000 })).toBeUndefined()
+  expect(contextMeter({ tokens: 90_000, window: 200_000, percent: 45 })).toEqual({
+    filled: 5, width: 10, percent: 45, text: '90k/200k',
+  })
+  expect(formatTokens(1_000_000)).toBe('1M')
+  expect(formatTokens(850)).toBe('850')
 })
