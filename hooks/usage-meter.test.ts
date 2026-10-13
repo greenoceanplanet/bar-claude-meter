@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { dueToasts, statusText, type Clock, type RateLimit } from './meter'
+import { dueToasts, formatLeft, stackedBar, statusText, type Clock, type RateLimit } from './meter'
 
 // Fixed clock: reports UTC so results do not depend on the machine timezone.
 const clock: Clock = (d) =>
@@ -13,25 +13,30 @@ const five = (p: number, ...rest: [string | undefined] | []): RateLimit => ({
 })
 const week = (p: number): RateLimit => ({ kind: 'seven_day', percentUsed: p, resetsAt: '2026-10-05T00:00:00Z' })
 
-test('status text shapes', () => {
-  expect(statusText([five(62), week(41)], clock)).toBe('Claude 5h 62% (resets 18:40) · week 41%')
-  expect(statusText([week(41), five(62)], clock)).toBe('Claude 5h 62% (resets 18:40) · week 41%')
-  expect(statusText([five(62)], clock)).toBe('Claude 5h 62% (resets 18:40)')
-  expect(statusText([week(41)], clock)).toBe('Claude week 41%')
-  expect(statusText([week(41), { kind: 'weird', percentUsed: 5 }, five(1)], clock)).toBe(
-    'Claude 5h 1% (resets 18:40) · week 41% · weird 5%',
-  )
-  expect(statusText([{ kind: 'spend_limit', percentUsed: 120 }, five(10)], clock)).toBe(
-    'Claude 5h 10% (resets 18:40) · spend 120%',
-  )
+// 2h30m before R5: half the 5h window left.
+const NOW = new Date('2026-10-02T16:10:00Z')
+
+test('stacked bar: top = quota left, bottom = time left', () => {
+  expect(stackedBar(1, 1)).toBe('▕██████████▏')
+  expect(stackedBar(0.7, 0.5)).toBe('▕█████▀▀   ▏')
+  expect(stackedBar(0.3, 0.5)).toBe('▕███▄▄     ▏')
+  expect(stackedBar(0.4, undefined)).toBe('▕▀▀▀▀      ▏')
+  expect(stackedBar(-1, 2)).toBe('▕▄▄▄▄▄▄▄▄▄▄▏')
 })
 
-test('missing or invalid resetsAt, rounding, empty', () => {
-  expect(statusText([five(62, undefined)], clock)).toBe('Claude 5h 62%')
-  expect(statusText([five(62, 'not a date')], clock)).toBe('Claude 5h 62%')
-  expect(statusText([five(61.5)], clock)).toBe('Claude 5h 62% (resets 18:40)')
-  expect(statusText([five(5, '2026-10-02T03:05:00Z')], clock)).toBe('Claude 5h 5% (resets 03:05)')
-  expect(statusText([], clock)).toBeUndefined()
+test('status text shapes', () => {
+  expect(statusText([week(41), five(30)], clock, NOW)).toBe(
+    '5h ▕█████▀▀   ▏ 70% 2h30m  week ▕███▀▀▀    ▏ 59% 2d7h',
+  )
+  expect(statusText([five(30, undefined)], clock, NOW)).toBe('5h ▕▀▀▀▀▀▀▀   ▏ 70%')
+  expect(statusText([{ kind: 'spend_limit', percentUsed: 120 }], clock, NOW)).toBe('spend 120%')
+  expect(statusText([], clock, NOW)).toBeUndefined()
+})
+
+test('time formatting', () => {
+  expect(formatLeft(45 * 60_000)).toBe('45m')
+  expect(formatLeft(125 * 60_000)).toBe('2h05m')
+  expect(formatLeft((3 * 1440 + 4 * 60) * 60_000)).toBe('3d4h')
 })
 
 test('toast thresholds', () => {
@@ -87,12 +92,12 @@ test('a measure event sets the status line', async ($, on) => {
   on('session.measure', (_$, e) => ({ changed: e.changed }))
   on('ui.status', (_$, e) => {
     seen.push(e.text)
-    return {} as never
+    return { value: undefined } as never
   })
   await $.session.measure({
     context: {} as never,
     rateLimits: [{ kind: 'seven_day', percentUsed: 41 }],
     changed: ['rateLimits'],
   })
-  expect(seen).toEqual(['Claude week 41%'])
+  expect(seen).toEqual([expect.stringMatching(/^week ▕[▀ ]{10}▏ 59%$/)])
 })

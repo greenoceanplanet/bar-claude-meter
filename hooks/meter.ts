@@ -35,18 +35,62 @@ export function resetTime(resetsAt: string | undefined, clock: Clock): string | 
   return clock(date)
 }
 
+const WINDOW_MS: Record<string, number> = {
+  five_hour: 5 * 3600_000,
+  seven_day: 7 * 24 * 3600_000,
+}
+
+export const BAR_WIDTH = 10
+
+/** Milliseconds until reset, or undefined. */
+export function msLeft(resetsAt: string | undefined, now: Date): number | undefined {
+  if (!resetsAt) return undefined
+  const t = new Date(resetsAt).getTime()
+  if (Number.isNaN(t)) return undefined
+  return Math.max(0, t - now.getTime())
+}
+
+/** "2h05m", "3d4h", "45m". */
+export function formatLeft(ms: number): string {
+  const totalMin = Math.floor(ms / 60_000)
+  const d = Math.floor(totalMin / 1440)
+  const h = Math.floor((totalMin % 1440) / 60)
+  const m = totalMin % 60
+  if (d > 0) return `${d}d${h}h`
+  if (h > 0) return `${h}h${String(m).padStart(2, '0')}m`
+  return `${m}m`
+}
+
+/**
+ * Two bars stacked in one row with half blocks: top = quota left, bottom = time left.
+ * A trailing ▀ means quota outlasts time (on pace); a trailing ▄ means quota runs out first.
+ */
+export function stackedBar(quotaLeft: number, timeLeft: number | undefined, width = BAR_WIDTH): string {
+  const cells = (f: number) => Math.round(Math.min(1, Math.max(0, f)) * width)
+  const top = cells(quotaLeft)
+  const bottom = timeLeft === undefined ? -1 : cells(timeLeft)
+  let out = ''
+  for (let i = 0; i < width; i++) {
+    const t = i < top
+    const b = i < bottom
+    out += t && b ? '█' : t ? '▀' : b ? '▄' : ' '
+  }
+  return `▕${out}▏`
+}
+
 /** Status line text, or undefined to clear it. */
-export function statusText(limits: RateLimit[], clock: Clock): string | undefined {
+export function statusText(limits: RateLimit[], clock: Clock, now: Date = new Date()): string | undefined {
   if (limits.length === 0) return undefined
   const parts = sortLimits(limits).map((limit) => {
-    let part = `${labelFor(limit.kind)} ${Math.round(limit.percentUsed)}%`
-    if (limit.kind === 'five_hour') {
-      const time = resetTime(limit.resetsAt, clock)
-      if (time) part += ` (resets ${time})`
-    }
-    return part
+    const left = Math.max(0, 100 - limit.percentUsed)
+    const window = WINDOW_MS[limit.kind]
+    if (!window) return `${labelFor(limit.kind)} ${Math.round(limit.percentUsed)}%`
+    const ms = msLeft(limit.resetsAt, now)
+    const bar = stackedBar(left / 100, ms === undefined ? undefined : ms / window)
+    const time = ms === undefined ? '' : ` ${formatLeft(ms)}`
+    return `${labelFor(limit.kind)} ${bar} ${Math.round(left)}%${time}`
   })
-  return `Claude ${parts.join(' · ')}`
+  return parts.join('  ')
 }
 
 export function toastText(limit: RateLimit, clock: Clock): string {
