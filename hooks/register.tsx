@@ -4,7 +4,7 @@ import { barWidthFor, contextMeter, prettyModel, dueToasts, glyph, localClock, m
 
 const QUOTA_COLOR = '#D97757'
 const TIME_COLOR = '#808080'
-/** Terminal width from which each bar also shows its quota % and time left. */
+/** Terminal width from which each bar shows its label, quota % and time left. */
 const NUMBERS_MIN_COLUMNS = 88
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
@@ -85,7 +85,7 @@ export const register: Register = (on) => {
         ) : null}
         {list.map((m, i) => (
           <Box key={m.label}>
-            <Text dimColor>{(i > 0 || model ? ' ' : '') + (m.label === 'week' ? '7d' : m.label)}▕</Text>
+            <Text dimColor>{(i > 0 || model ? ' ' : '') + (showNumbers ? (m.label === 'week' ? '7d' : m.label) : '')}▕</Text>
             {m.cells.map((c, j) => (
               <Text key={String(j)} {...cellColors(c)}>
                 {c.top && c.bottom ? '▀' : glyph(c)}

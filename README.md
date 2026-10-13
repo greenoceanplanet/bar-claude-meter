@@ -16,7 +16,7 @@ Opus 5.5 high 5h▕████▀▀  ▏ 7d▕███▀▀   ▏ C28%
   - Bottom (gray) = time left until reset
   - Orange (▀) alone at the end means quota outlasts time (on pace). Gray (▄) alone means quota is running out faster than time.
 - **C%**: context window used. Red at 80% and above.
-- On terminals 110 columns or wider, each bar is followed by the quota % and time left (`70% 2h30m`).
+- On terminals 110 columns or wider, bars get their `5h`/`7d` labels and are followed by the quota % and time left (`70% 2h30m`).
 - Bar length follows terminal width, 5 to 10 cells.
 - A toast when a 5h or weekly window first reaches 80% and 90%.
 
