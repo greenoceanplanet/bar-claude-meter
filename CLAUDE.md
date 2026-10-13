@@ -4,7 +4,7 @@ Claude 사용량(5시간/주간 rate limit)을 상태줄에 보여주는 `usage-
 
 ## 출처
 - 원본: https://github.com/0xGondarxyz/usage-meter (v0.1.0, commit 4bfe82f) — MIT
-- 설치본 위치: `~/.claude/plugins/cache/usage-meter/usage-meter/0.1.0` (`usage-meter@usage-meter`, 아직 활성 상태)
+- 설치본 위치: `~/.claude/plugins/cache/usage-meter/usage-meter/0.1.0` (`usage-meter@usage-meter`, 제거됨)
 - git: 첫 커밋 `3e39f3b` = 원본 그대로. remote `upstream` = 원본 저장소 (fork는 아직 안 함)
 
 ## 구조
@@ -20,6 +20,6 @@ Claude 사용량(5시간/주간 rate limit)을 상태줄에 보여주는 `usage-
 
 ## 다음 할 일
 1. ~~`.claude-plugin/*.json` 이름 → `claude-meter`~~ (완료)
-2. 로컬 marketplace 등록: `/plugin marketplace add <이 폴더 경로>` → `claude-meter@claude-meter` 설치
-3. 원본 `usage-meter@usage-meter` 비활성화/제거
+2. ~~로컬 marketplace 등록 + `claude-meter@claude-meter` 설치~~ (완료)
+3. ~~원본 `usage-meter@usage-meter` 제거~~ (완료)
 4. 이후 원하는 기능 수정 (사용자에게 무엇을 바꿀지 확인)
