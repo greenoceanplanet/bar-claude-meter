@@ -1,15 +1,15 @@
 {
   "name": "meter-js",
   "owner": {
-    "name": "Murat Can Yuksel",
-    "url": "https://github.com/0xGondarxyz"
+    "name": "Jinsu",
+    "url": "https://github.com/greenoceanplanet"
   },
-  "description": "Shows your Claude rate limits in the status line and warns at 80% and 90%.",
+  "description": "Claude 5h/weekly rate limits as stacked quota/time bars under the prompt, plus model, effort and context.",
   "plugins": [
     {
       "name": "meter-js",
       "source": "./",
-      "description": "Shows your Claude 5 hour and weekly rate limits in the status line and warns at 80% and 90%.",
+      "description": "Claude 5h/weekly rate limits as stacked quota/time bars under the prompt, plus model, effort and context.",
       "version": "0.1.0"
     }
   ]

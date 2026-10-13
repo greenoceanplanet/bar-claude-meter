@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Shows your Claude 5 hour and weekly rate limits as stacked quota/time bars above the prompt and warns at 80% and 90%.",
   "author": {
-    "name": "Murat Can Yuksel",
-    "url": "https://github.com/0xGondarxyz"
+    "name": "Jinsu",
+    "url": "https://github.com/greenoceanplanet"
   },
   "license": "MIT",
   "types": "./types/index.d.ts"
