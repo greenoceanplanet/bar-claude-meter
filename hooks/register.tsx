@@ -4,6 +4,8 @@ import { contextMeter, prettyModel, dueToasts, glyph, localClock, meters, type C
 
 const QUOTA_COLOR = '#D97757'
 const TIME_COLOR = '#808080'
+/** Terminal width from which each bar also shows its quota % and time left. */
+const NUMBERS_MIN_COLUMNS = 110
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
 
@@ -70,6 +72,7 @@ export const register: Register = (on) => {
     const model = await read($, modelAtom)
     const effort = await read($, effortAtom)
     if (list.length === 0 && !ctx && !model) return next(e)
+    const showNumbers = (e.viewport?.columns ?? 0) >= NUMBERS_MIN_COLUMNS
     const ctxColor = ctx && ctx.percent >= 80 ? CTX_WARN_COLOR : CTX_COLOR
     const { Box, Text } = $.ui.resolve(e)
     return (
@@ -82,18 +85,20 @@ export const register: Register = (on) => {
         ) : null}
         {list.map((m, i) => (
           <Box key={m.label}>
-            <Text dimColor>{(i > 0 || model ? '  ' : '') + (m.label === 'week' ? '7d' : m.label)}▕</Text>
+            <Text dimColor>{(i > 0 || model ? ' ' : '') + (m.label === 'week' ? '7d' : m.label)}▕</Text>
             {m.cells.map((c, j) => (
               <Text key={String(j)} {...cellColors(c)}>
                 {c.top && c.bottom ? '▀' : glyph(c)}
               </Text>
             ))}
             <Text dimColor>▏</Text>
+            {showNumbers ? <Text color={QUOTA_COLOR}>{m.percentLeft}%</Text> : null}
+            {showNumbers && m.timeLeft ? <Text color={TIME_COLOR}> {m.timeLeft}</Text> : null}
           </Box>
         ))}
         {ctx ? (
           <Box key="ctx">
-            <Text color={ctxColor}>{(list.length > 0 || model ? '  ' : '') + `C${ctx.percent}%`}</Text>
+            <Text color={ctxColor}>{(list.length > 0 || model ? ' ' : '') + `C${ctx.percent}%`}</Text>
           </Box>
         ) : null}
         {hint ? <Text dimColor>{'  ' + hint}</Text> : null}
