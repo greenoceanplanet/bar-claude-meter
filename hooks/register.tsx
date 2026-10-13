@@ -48,7 +48,7 @@ export const register: Register = (on) => {
     const ctxColor = ctx && ctx.percent >= 80 ? CTX_WARN_COLOR : CTX_COLOR
     const { Box, Text } = $.ui.resolve(e)
     return (
-      <Box marginBottom={-1}>
+      <Box>
         {list.map((m, i) => (
           <Box key={m.label}>
             <Text dimColor>{(i > 0 ? '  ' : '') + m.label} ▕</Text>
