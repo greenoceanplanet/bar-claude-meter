@@ -62,24 +62,18 @@ export function formatLeft(ms: number): string {
 }
 
 /**
- * Two thin bars stacked in one row with braille dots: top = quota left (dot row 2),
- * bottom = time left (dot row 3). Each cell holds two dot columns, so the resolution is 2 × width.
- * Bare top dots at the end mean quota outlasts time; bare bottom dots mean quota runs out first.
+ * Two bars stacked in one row with half blocks: top = quota left, bottom = time left.
+ * A trailing ▀ means quota outlasts time (on pace); a trailing ▄ means quota runs out first.
  */
 export function stackedBar(quotaLeft: number, timeLeft: number | undefined, width = BAR_WIDTH): string {
-  const steps = (f: number) => Math.round(Math.min(1, Math.max(0, f)) * width * 2)
-  const top = steps(quotaLeft)
-  const bottom = timeLeft === undefined ? -1 : steps(timeLeft)
+  const cells = (f: number) => Math.round(Math.min(1, Math.max(0, f)) * width)
+  const top = cells(quotaLeft)
+  const bottom = timeLeft === undefined ? -1 : cells(timeLeft)
   let out = ''
   for (let i = 0; i < width; i++) {
-    const l = 2 * i
-    const r = l + 1
-    let bits = 0
-    if (l < top) bits |= 0x02
-    if (r < top) bits |= 0x10
-    if (l < bottom) bits |= 0x04
-    if (r < bottom) bits |= 0x20
-    out += String.fromCharCode(0x2800 + bits)
+    const t = i < top
+    const b = i < bottom
+    out += t && b ? '█' : t ? '▀' : b ? '▄' : ' '
   }
   return `▕${out}▏`
 }
