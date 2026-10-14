@@ -5,7 +5,7 @@ import { barWidthFor, contextMeter, prettyModel, dueToasts, glyph, localClock, m
 const QUOTA_COLOR = '#db724f'
 const TIME_COLOR = '#888888'
 /** Terminal width from which each bar shows its 5h / 7d label. */
-const LABELS_MIN_COLUMNS = 60
+const LABELS_MIN_COLUMNS = 70
 /** Terminal width from which each bar also shows its quota % and time left. */
 const NUMBERS_MIN_COLUMNS = 90
 const CTX_COLOR = '#7BD88F'
@@ -68,43 +68,50 @@ export const register: Register = (on) => {
   on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
     const list = meters(await read($, limitsAtom), new Date(await $.clock.now()), barWidthFor(e.viewport?.columns))
     const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
-    const hint = e.props.hint.replace(/\s*\(shift\+tab to cycle\)/g, '')
+    const narrow = (e.viewport?.columns ?? 0) < NUMBERS_MIN_COLUMNS
+    let hint = e.props.hint.replace(/\s*\(shift\+tab to cycle\)/g, '')
       .replace(/\s*·?\s*← for agents/g, '')
-      .trim()
+    // Narrow windows have no room for it; Esc still works.
+    if (narrow) hint = hint.replace(/\s*·?\s*esc to interrupt/g, '')
+    hint = hint.replace(/^[\s·]+|[\s·]+$/g, '')
     const model = await read($, modelAtom)
     const effort = await read($, effortAtom)
     if (list.length === 0 && !ctx && !model) return next(e)
     const showLabels = (e.viewport?.columns ?? 0) >= LABELS_MIN_COLUMNS
-    const showNumbers = (e.viewport?.columns ?? 0) >= NUMBERS_MIN_COLUMNS
+    const showNumbers = !narrow
     const ctxColor = ctx && ctx.percent >= 80 ? CTX_WARN_COLOR : CTX_COLOR
     const { Box, Text } = $.ui.resolve(e)
     return (
+      // One Text holds every part, so a narrow window wraps the whole line at its end
+      // instead of wrapping each part inside its own column.
       <Box>
-        {model ? (
-          <Box key="model">
-            <Text bold>{prettyModel(model)}</Text>
-            {effort ? <Text> {effort}</Text> : null}
-          </Box>
-        ) : null}
-        {list.map((m, i) => (
-          <Box key={m.label}>
-            <Text dimColor>{(i > 0 || model ? ' ' : '') + (showLabels ? (m.label === 'week' ? '7d' : m.label) : '')}▕</Text>
-            {m.cells.map((c, j) => (
-              <Text key={String(j)} {...cellColors(c)}>
-                {c.top && c.bottom ? '▀' : glyph(c)}
-              </Text>
-            ))}
-            <Text dimColor>▏</Text>
-            {showNumbers ? <Text color={QUOTA_COLOR}>{m.percentLeft}%</Text> : null}
-            {showNumbers && m.timeLeft ? <Text color={TIME_COLOR}> {m.timeLeft}</Text> : null}
-          </Box>
-        ))}
-        {ctx ? (
-          <Box key="ctx">
-            <Text color={ctxColor}>{(list.length > 0 || model ? ' ' : '') + `C${ctx.percent}%`}</Text>
-          </Box>
-        ) : null}
-        {hint ? <Text dimColor>{'  ' + hint}</Text> : null}
+        <Text>
+          {model ? (
+            <Text key="model">
+              <Text bold>{prettyModel(model)}</Text>
+              {effort ? <Text> {effort}</Text> : null}
+            </Text>
+          ) : null}
+          {list.map((m, i) => (
+            <Text key={m.label}>
+              <Text dimColor>{(i > 0 || model ? ' ' : '') + (showLabels ? (m.label === 'week' ? '7d' : m.label) : '')}▕</Text>
+              {m.cells.map((c, j) => (
+                <Text key={String(j)} {...cellColors(c)}>
+                  {c.top && c.bottom ? '▀' : glyph(c)}
+                </Text>
+              ))}
+              <Text dimColor>▏</Text>
+              {showNumbers ? <Text color={QUOTA_COLOR}>{m.percentLeft}%</Text> : null}
+              {showNumbers && m.timeLeft ? <Text color={TIME_COLOR}> {m.timeLeft}</Text> : null}
+            </Text>
+          ))}
+          {ctx ? (
+            <Text key="ctx">
+              <Text color={ctxColor}>{(list.length > 0 || model ? ' ' : '') + `C${ctx.percent}%`}</Text>
+            </Text>
+          ) : null}
+          {hint ? <Text dimColor>{'  ' + hint}</Text> : null}
+        </Text>
       </Box>
     )
   })
