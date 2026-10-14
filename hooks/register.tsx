@@ -2,12 +2,12 @@ import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
 import { barWidthFor, contextMeter, prettyModel, dueToasts, glyph, localClock, meters, type Cell, type ContextUsage, type RateLimit } from './meter'
 
-const QUOTA_COLOR = '#D97757'
-const TIME_COLOR = '#808080'
+const QUOTA_COLOR = '#db724f'
+const TIME_COLOR = '#888888'
 /** Terminal width from which each bar shows its 5h / 7d label. */
 const LABELS_MIN_COLUMNS = 60
 /** Terminal width from which each bar also shows its quota % and time left. */
-const NUMBERS_MIN_COLUMNS = 85
+const NUMBERS_MIN_COLUMNS = 90
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
 
@@ -83,7 +83,7 @@ export const register: Register = (on) => {
         {model ? (
           <Box key="model">
             <Text bold>{prettyModel(model)}</Text>
-            {effort ? <Text dimColor> {effort}</Text> : null}
+            {effort ? <Text> {effort}</Text> : null}
           </Box>
         ) : null}
         {list.map((m, i) => (
