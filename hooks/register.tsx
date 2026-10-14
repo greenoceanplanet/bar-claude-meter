@@ -94,7 +94,7 @@ export const register: Register = (on) => {
           ) : null}
           {list.map((m, i) => (
             <Text key={m.label}>
-              <Text dimColor>{(i > 0 || model ? ' ' : '') + (showLabels ? (m.label === 'week' ? '7d' : m.label) : '')}▕</Text>
+              <Text dimColor>{((i > 0 && showNumbers) || (i === 0 && model) ? ' ' : '') + (showLabels ? (m.label === 'week' ? '7d' : m.label) : '')}▕</Text>
               {m.cells.map((c, j) => (
                 <Text key={String(j)} {...cellColors(c)}>
                   {c.top && c.bottom ? '▀' : glyph(c)}
