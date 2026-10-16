@@ -10,6 +10,12 @@ const LABELS_MIN_COLUMNS = 70
 const NUMBERS_MIN_COLUMNS = 90
 const CTX_COLOR = '#7BD88F'
 const CTX_WARN_COLOR = '#FF5F5F'
+/** Engine hint parts: true = always show, false = always hide, 'wide' = only from NUMBERS_MIN_COLUMNS. Unlisted parts show. */
+const HINT_PARTS: { re: RegExp; show: boolean | 'wide' }[] = [
+  { re: /\s*\(shift\+tab to cycle\)/g, show: false },
+  { re: /\s*·?\s*← for agents/g, show: false },
+  { re: /\s*·?\s*esc to interrupt/g, show: 'wide' },
+]
 
 const limitsAtom = atom({ plugin: 'meter-js', key: 'limits' } as const, [] as RateLimit[])
 const contextAtom = atom({ plugin: 'meter-js', key: 'context' } as const, null as ContextUsage | null)
@@ -69,11 +75,10 @@ export const register: Register = (on) => {
     const list = meters(await read($, limitsAtom), new Date(await $.clock.now()), barWidthFor(e.viewport?.columns))
     const ctx = contextMeter((await read($, contextAtom)) ?? undefined)
     const narrow = (e.viewport?.columns ?? 0) < NUMBERS_MIN_COLUMNS
-    let hint = e.props.hint.replace(/\s*\(shift\+tab to cycle\)/g, '')
-      .replace(/\s*·?\s*← for agents/g, '')
-    // Narrow windows have no room for it; Esc still works.
-    if (narrow) hint = hint.replace(/\s*·?\s*esc to interrupt/g, '')
-    hint = hint.replace(/^[\s·]+|[\s·]+$/g, '')
+    const hint = HINT_PARTS
+      .filter((p) => p.show === false || (p.show === 'wide' && narrow))
+      .reduce((h, p) => h.replace(p.re, ''), e.props.hint)
+      .replace(/^[\s·]+|[\s·]+$/g, '')
     const model = await read($, modelAtom)
     const effort = await read($, effortAtom)
     if (list.length === 0 && !ctx && !model) return next(e)

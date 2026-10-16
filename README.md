@@ -20,7 +20,7 @@ Opus 5.5 high 5h▕████▀▀  ▏ 7d▕███▀▀   ▏ C28%
 - Bar length follows terminal width, 5 to 10 cells.
 - A toast when a 5h or weekly window first reaches 80% and 90%.
 
-The hint line's `(shift+tab to cycle)` and `← for agents` are hidden. The permission mode label (`⏵⏵ auto mode on ·`) is drawn by Claude Code and cannot be changed.
+The hint line's `(shift+tab to cycle)` and `← for agents` are hidden, and `esc to interrupt` shows only at 90 columns or wider. Set each part in `HINT_PARTS` in `hooks/register.tsx` to `true` (always), `false` (hide) or `'wide'` (wide terminals only); parts not listed there show as is. The permission mode label (`⏵⏵ auto mode on ·`) is drawn by Claude Code and cannot be changed.
 
 ## Install
 

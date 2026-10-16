@@ -20,7 +20,7 @@ Opus 5.5 high 5h▕████▀▀  ▏ 7d▕███▀▀   ▏ C28%
 - 막대 길이는 터미널 폭에 따라 5~10칸.
 - 5h·주간 한도가 80%, 90%에 처음 닿을 때 토스트로 알림.
 
-원래 힌트줄의 `(shift+tab to cycle)`, `← for agents` 문구는 숨긴다. 권한 모드 표시(`⏵⏵ auto mode on ·`)는 엔진이 그려서 바꿀 수 없다.
+원래 힌트줄의 `(shift+tab to cycle)`, `← for agents` 문구는 숨기고, `esc to interrupt`는 90칸 이상일 때만 보인다. 문구별 표시 여부는 `hooks/register.tsx`의 `HINT_PARTS`에서 `true`(항상) / `false`(숨김) / `'wide'`(넓을 때만)로 바꾸고, 표에 없는 문구는 그대로 나온다. 권한 모드 표시(`⏵⏵ auto mode on ·`)는 엔진이 그려서 바꿀 수 없다.
 
 ## 설치
 
