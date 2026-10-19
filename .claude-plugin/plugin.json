@@ -1,6 +1,6 @@
 {
   "name": "meter-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shows your Claude 5 hour and weekly rate limits as stacked quota/time bars above the prompt and warns at 80% and 90%.",
   "author": {
     "name": "Jinsu",
