@@ -125,10 +125,16 @@ export function statusText(limits: RateLimit[], clock: Clock, now: Date = new Da
   return parts.join('  ')
 }
 
+const TOAST_LABELS: Record<string, string> = { five_hour: '5-hour', seven_day: 'weekly' }
+
+function toastLabel(kind: string): string {
+  return TOAST_LABELS[kind] ?? labelFor(kind)
+}
+
 export function toastText(limit: RateLimit, clock: Clock): string {
   const time = resetTime(limit.resetsAt, clock)
   const resets = time ? `, resets ${time}` : ''
-  return `Claude ${labelFor(limit.kind)} limit at ${Math.round(limit.percentUsed)}%${resets}. Good time to hand big tasks to Sonnet.`
+  return `Claude ${toastLabel(limit.kind)} usage at ${Math.round(limit.percentUsed)}%${resets}.`
 }
 
 /**

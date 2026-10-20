@@ -100,26 +100,6 @@ Restart Claude Code after an update.
 | Only some parts show | Your terminal is narrow. Widen the window to 90 columns or more to see the numbers. |
 | `/plugin` not found | Update Claude Code: `claude update`. |
 
-## Customizing
-
-To change the mod, clone this repository and run Claude Code from your copy:
-
-```
-git clone https://github.com/greenoceanplanet/bar-claude-meter.git
-claude --plugin-dir ./bar-claude-meter
-```
-
-- **Colors:** constants at the top of `hooks/register.tsx` (`QUOTA_COLOR`, `TIME_COLOR`, `CTX_COLOR`, `CTX_WARN_COLOR`).
-- **Width cutoffs:** `LABELS_MIN_COLUMNS` and `NUMBERS_MIN_COLUMNS` in `hooks/register.tsx`.
-- **Bar length:** `barWidthFor` in `hooks/meter.ts` (5 to 10 cells, by terminal width).
-- **Claude Code's own hints:** `HINT_PARTS` in `hooks/register.tsx`. By default `(shift+tab to cycle)` and `← for agents` are hidden and `esc to interrupt` shows only on wide terminals. Set each to `true` (always), `false` (hide) or `'wide'` (wide terminals only). The permission mode label (`⏵⏵ auto mode on ·`) is drawn by Claude Code and cannot be changed.
-
-Run the tests with:
-
-```
-claude plugin test .
-```
-
 ## Credits
 
 Based on [usage-meter](https://github.com/0xGondarxyz/usage-meter) by 0xGondarxyz (MIT).

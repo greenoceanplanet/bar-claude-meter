@@ -43,9 +43,9 @@ test('toast thresholds', () => {
   const fired = new Map<string, number>()
   const step = (p: number) => dueToasts([five(p)], fired, clock)
   expect(step(79)).toEqual([])
-  expect(step(80)).toEqual(['Claude 5h limit at 80%, resets 18:40. Good time to hand big tasks to Sonnet.'])
+  expect(step(80)).toEqual(['Claude 5-hour usage at 80%, resets 18:40.'])
   expect(step(85)).toEqual([])
-  expect(step(90)).toEqual(['Claude 5h limit at 90%, resets 18:40. Good time to hand big tasks to Sonnet.'])
+  expect(step(90)).toEqual(['Claude 5-hour usage at 90%, resets 18:40.'])
   expect(step(95)).toEqual([])
 })
 
@@ -53,7 +53,7 @@ test('jump past 90 sends only the 90 toast, then nothing', () => {
   const fired = new Map<string, number>()
   expect(dueToasts([five(75)], fired, clock)).toEqual([])
   expect(dueToasts([five(95)], fired, clock)).toEqual([
-    'Claude 5h limit at 95%, resets 18:40. Good time to hand big tasks to Sonnet.',
+    'Claude 5-hour usage at 95%, resets 18:40.',
   ])
   expect(dueToasts([five(96)], fired, clock)).toEqual([])
   expect(dueToasts([five(82)], fired, clock)).toEqual([])
@@ -64,7 +64,7 @@ test('dropping under 80 then rising warns again', () => {
   expect(dueToasts([five(90)], fired, clock)).toHaveLength(1)
   expect(dueToasts([five(10)], fired, clock)).toEqual([])
   expect(dueToasts([five(80)], fired, clock)).toEqual([
-    'Claude 5h limit at 80%, resets 18:40. Good time to hand big tasks to Sonnet.',
+    'Claude 5-hour usage at 80%, resets 18:40.',
   ])
 })
 
@@ -79,11 +79,11 @@ test('windows are independent; no time drops the clause', () => {
   const fired = new Map<string, number>()
   expect(dueToasts([five(82)], fired, clock)).toHaveLength(1)
   expect(dueToasts([five(82), week(85)], fired, clock)).toEqual([
-    'Claude week limit at 85%, resets 00:00. Good time to hand big tasks to Sonnet.',
+    'Claude weekly usage at 85%, resets 00:00.',
   ])
   expect(dueToasts([five(85, undefined), week(85)], new Map(), clock)).toEqual([
-    'Claude 5h limit at 85%. Good time to hand big tasks to Sonnet.',
-    'Claude week limit at 85%, resets 00:00. Good time to hand big tasks to Sonnet.',
+    'Claude 5-hour usage at 85%.',
+    'Claude weekly usage at 85%, resets 00:00.',
   ])
 })
 

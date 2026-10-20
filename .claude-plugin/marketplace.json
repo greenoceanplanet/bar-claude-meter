@@ -10,7 +10,7 @@
       "name": "bar-claude-meter",
       "source": "./",
       "description": "Claude 5h/weekly rate limits as stacked quota/time bars under the prompt, plus model, effort and context.",
-      "version": "0.2.0"
+      "version": "0.2.1"
     }
   ]
 }

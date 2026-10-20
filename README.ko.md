@@ -100,26 +100,6 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 | 일부만 보임 | 터미널이 좁아서입니다. 창을 90칸 이상으로 넓히면 숫자까지 보입니다. |
 | `/plugin` 명령이 없음 | Claude Code를 업데이트하세요: `claude update` |
 
-## 직접 고쳐 쓰기
-
-저장소를 받아서 그 폴더로 Claude Code를 실행하면 됩니다.
-
-```
-git clone https://github.com/greenoceanplanet/bar-claude-meter.git
-claude --plugin-dir ./bar-claude-meter
-```
-
-- **색:** `hooks/register.tsx` 위쪽 상수 (`QUOTA_COLOR`, `TIME_COLOR`, `CTX_COLOR`, `CTX_WARN_COLOR`)
-- **폭 기준:** `hooks/register.tsx`의 `LABELS_MIN_COLUMNS`, `NUMBERS_MIN_COLUMNS`
-- **막대 길이:** `hooks/meter.ts`의 `barWidthFor` (터미널 폭에 따라 5~10칸)
-- **Claude Code 기본 안내 문구:** `hooks/register.tsx`의 `HINT_PARTS`. 기본값은 `(shift+tab to cycle)`, `← for agents`는 숨기고 `esc to interrupt`는 넓은 터미널에서만 표시. 각각 `true`(항상) / `false`(숨김) / `'wide'`(넓을 때만)로 바꿀 수 있습니다. 권한 모드 표시(`⏵⏵ auto mode on ·`)는 Claude Code가 그리는 부분이라 바꿀 수 없습니다.
-
-테스트 실행:
-
-```
-claude plugin test .
-```
-
 ## 출처
 
 0xGondarxyz의 [usage-meter](https://github.com/0xGondarxyz/usage-meter)(MIT)를 바탕으로 만들었습니다.
