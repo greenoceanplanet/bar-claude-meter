@@ -1,10 +1,10 @@
-# meter-js
+# bar-claude-meter
 
 [English](README.md) | **한국어**
 
 Claude 사용량이 얼마나 남았는지 Claude Code 입력창 바로 아래에 보여주는 mod입니다.
 
-![Claude Code에서 meter-js 사용 화면](docs/screenshot.png)
+![Claude Code에서 bar-claude-meter 사용 화면](docs/screenshot.png)
 
 입력창 아래 줄에 지금 쓰는 모델과 effort, 5시간·주간(7일) 사용 한도 막대, 컨텍스트 사용률이 표시됩니다. `/usage`를 따로 입력하지 않아도 한도까지 얼마나 남았는지 바로 볼 수 있습니다.
 
@@ -46,22 +46,22 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 **1. 마켓플레이스 추가.** Claude Code가 이 mod를 어디서 받을지 알려줍니다.
 
 ```
-/plugin marketplace add greenoceanplanet/meter-js
+/plugin marketplace add greenoceanplanet/bar-claude-meter
 ```
 
 **2. mod 설치.**
 
 ```
-/plugin install meter-js@meter-js
+/plugin install bar-claude-meter@bar-claude-meter
 ```
 
-`meter-js@meter-js`는 "`meter-js` 마켓플레이스에 있는 `meter-js` mod"라는 뜻입니다.
+`bar-claude-meter@bar-claude-meter`는 "`bar-claude-meter` 마켓플레이스에 있는 `bar-claude-meter` mod"라는 뜻입니다.
 
 **3. Claude Code 재시작.** `/exit`(또는 Ctrl+C 두 번)로 끄고 `claude`를 다시 실행합니다.
 
 **4. 아무 메시지나 보내기.** 사용량 정보는 응답과 함께 오기 때문에 Claude가 한 번 답한 뒤부터 막대가 보입니다.
 
-메뉴로 하고 싶다면 `/plugin`을 입력하고 **Marketplaces**에서 `greenoceanplanet/meter-js`를 추가한 뒤 **Discover**에서 `meter-js`를 고르면 됩니다.
+메뉴로 하고 싶다면 `/plugin`을 입력하고 **Marketplaces**에서 `greenoceanplanet/bar-claude-meter`를 추가한 뒤 **Discover**에서 `bar-claude-meter`를 고르면 됩니다.
 
 > Mod는 샌드박스 없이 Claude Code와 같은 권한으로 실행됩니다. 소스가 짧으니 설치 전에 [`hooks/register.tsx`](hooks/register.tsx)와 [`hooks/meter.ts`](hooks/meter.ts)를 한번 훑어보셔도 좋습니다.
 
@@ -70,13 +70,13 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 직접 추가한 마켓플레이스는 기본으로 자동 업데이트가 꺼져 있습니다. 자동 업데이트를 켜려면:
 
 1. `/plugin`을 입력하고 **Marketplaces**를 엽니다.
-2. **meter-js**를 선택합니다.
+2. **bar-claude-meter**를 선택합니다.
 3. **Enable auto-update**를 고릅니다.
 
 그러면 Claude Code를 시작할 때마다 새 버전이 있는지 확인합니다. 직접 업데이트하려면:
 
 ```
-/plugin marketplace update meter-js
+/plugin marketplace update bar-claude-meter
 ```
 
 업데이트 후에는 Claude Code를 다시 시작하세요.
@@ -84,8 +84,8 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 ## 삭제
 
 ```
-/plugin uninstall meter-js@meter-js
-/plugin marketplace remove meter-js
+/plugin uninstall bar-claude-meter@bar-claude-meter
+/plugin marketplace remove bar-claude-meter
 ```
 
 ## 문제 해결
@@ -101,8 +101,8 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 저장소를 받아서 그 폴더로 Claude Code를 실행하면 됩니다.
 
 ```
-git clone https://github.com/greenoceanplanet/meter-js.git
-claude --plugin-dir ./meter-js
+git clone https://github.com/greenoceanplanet/bar-claude-meter.git
+claude --plugin-dir ./bar-claude-meter
 ```
 
 - **색:** `hooks/register.tsx` 위쪽 상수 (`QUOTA_COLOR`, `TIME_COLOR`, `CTX_COLOR`, `CTX_WARN_COLOR`)

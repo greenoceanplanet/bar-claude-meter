@@ -17,10 +17,10 @@ const HINT_PARTS: { re: RegExp; show: boolean | 'wide' }[] = [
   { re: /\s*·?\s*esc to interrupt/g, show: 'wide' },
 ]
 
-const limitsAtom = atom({ plugin: 'meter-js', key: 'limits' } as const, [] as RateLimit[])
-const contextAtom = atom({ plugin: 'meter-js', key: 'context' } as const, null as ContextUsage | null)
-const modelAtom = atom({ plugin: 'meter-js', key: 'model' } as const, null as string | null)
-const effortAtom = atom({ plugin: 'meter-js', key: 'effort' } as const, null as string | null)
+const limitsAtom = atom({ plugin: 'bar-claude-meter', key: 'limits' } as const, [] as RateLimit[])
+const contextAtom = atom({ plugin: 'bar-claude-meter', key: 'context' } as const, null as ContextUsage | null)
+const modelAtom = atom({ plugin: 'bar-claude-meter', key: 'model' } as const, null as string | null)
+const effortAtom = atom({ plugin: 'bar-claude-meter', key: 'effort' } as const, null as string | null)
 const fired = new Map<string, number>()
 
 /** Top half takes the glyph color, bottom half the background, so each bar keeps its own color. */

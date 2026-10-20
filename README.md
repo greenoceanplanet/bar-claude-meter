@@ -1,10 +1,10 @@
-# meter-js
+# bar-claude-meter
 
 **English** | [한국어](README.ko.md)
 
 See how much of your Claude usage is left, right under the prompt in Claude Code.
 
-![meter-js in Claude Code](docs/screenshot.png)
+![bar-claude-meter in Claude Code](docs/screenshot.png)
 
 The line under the prompt shows your model and effort, a bar each for the 5-hour and the weekly (7-day) limits, and how full your context window is. You can see how close you are to a limit without typing `/usage`.
 
@@ -46,22 +46,22 @@ Run these inside Claude Code (in the prompt, not in your system shell).
 **1. Add the marketplace.** This tells Claude Code where to find the mod.
 
 ```
-/plugin marketplace add greenoceanplanet/meter-js
+/plugin marketplace add greenoceanplanet/bar-claude-meter
 ```
 
 **2. Install the mod.**
 
 ```
-/plugin install meter-js@meter-js
+/plugin install bar-claude-meter@bar-claude-meter
 ```
 
-`meter-js@meter-js` means "the `meter-js` mod from the `meter-js` marketplace".
+`bar-claude-meter@bar-claude-meter` means "the `bar-claude-meter` mod from the `bar-claude-meter` marketplace".
 
 **3. Restart Claude Code.** Quit with `/exit` (or Ctrl+C twice) and run `claude` again.
 
 **4. Send any message.** The bars appear once Claude has answered, because usage figures arrive with each response.
 
-If you prefer menus, type `/plugin`, open **Marketplaces** to add `greenoceanplanet/meter-js`, then pick `meter-js` from **Discover**.
+If you prefer menus, type `/plugin`, open **Marketplaces** to add `greenoceanplanet/bar-claude-meter`, then pick `bar-claude-meter` from **Discover**.
 
 > Mods run with the same access as Claude Code itself; they are not sandboxed. The source is short. Read [`hooks/register.tsx`](hooks/register.tsx) and [`hooks/meter.ts`](hooks/meter.ts) before installing if you like.
 
@@ -70,13 +70,13 @@ If you prefer menus, type `/plugin`, open **Marketplaces** to add `greenoceanpla
 Marketplaces you add yourself do not update automatically by default. To turn automatic updates on:
 
 1. Type `/plugin` and open **Marketplaces**.
-2. Select **meter-js**.
+2. Select **bar-claude-meter**.
 3. Choose **Enable auto-update**.
 
 Claude Code then checks for a new version when it starts. To update by hand instead:
 
 ```
-/plugin marketplace update meter-js
+/plugin marketplace update bar-claude-meter
 ```
 
 Restart Claude Code after an update.
@@ -84,8 +84,8 @@ Restart Claude Code after an update.
 ## Uninstall
 
 ```
-/plugin uninstall meter-js@meter-js
-/plugin marketplace remove meter-js
+/plugin uninstall bar-claude-meter@bar-claude-meter
+/plugin marketplace remove bar-claude-meter
 ```
 
 ## Troubleshooting
@@ -101,8 +101,8 @@ Restart Claude Code after an update.
 To change the mod, clone this repository and run Claude Code from your copy:
 
 ```
-git clone https://github.com/greenoceanplanet/meter-js.git
-claude --plugin-dir ./meter-js
+git clone https://github.com/greenoceanplanet/bar-claude-meter.git
+claude --plugin-dir ./bar-claude-meter
 ```
 
 - **Colors:** constants at the top of `hooks/register.tsx` (`QUOTA_COLOR`, `TIME_COLOR`, `CTX_COLOR`, `CTX_WARN_COLOR`).

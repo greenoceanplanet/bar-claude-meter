@@ -1,5 +1,5 @@
 {
-  "name": "meter-js",
+  "name": "bar-claude-meter",
   "owner": {
     "name": "Jinsu",
     "url": "https://github.com/greenoceanplanet"
@@ -7,10 +7,10 @@
   "description": "Claude 5h/weekly rate limits as stacked quota/time bars under the prompt, plus model, effort and context.",
   "plugins": [
     {
-      "name": "meter-js",
+      "name": "bar-claude-meter",
       "source": "./",
       "description": "Claude 5h/weekly rate limits as stacked quota/time bars under the prompt, plus model, effort and context.",
-      "version": "0.1.1"
+      "version": "0.2.0"
     }
   ]
 }
