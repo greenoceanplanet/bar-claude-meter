@@ -63,6 +63,8 @@ Opus 5.5 medium  5h▕██████▏92% 4h23m  7d▕█████ ▏80
 
 메뉴로 하고 싶다면 `/plugin`을 입력하고 **Marketplaces**에서 `greenoceanplanet/bar-claude-meter`를 추가한 뒤 **Discover**에서 `bar-claude-meter`를 고르면 됩니다.
 
+더 간단하게는 Claude에게 맡겨도 됩니다. Claude Code 입력창에 `https://github.com/greenoceanplanet/bar-claude-meter 플러그인 설치해줘`라고 입력하면 위 두 단계를 대신 실행합니다. 그다음 Claude Code를 재시작(또는 `/reload-plugins` 입력)하세요.
+
 > Mod는 샌드박스 없이 Claude Code와 같은 권한으로 실행됩니다. 소스가 짧으니 설치 전에 [`hooks/register.tsx`](hooks/register.tsx)와 [`hooks/meter.ts`](hooks/meter.ts)를 한번 훑어보셔도 좋습니다.
 
 ## 업데이트 받기

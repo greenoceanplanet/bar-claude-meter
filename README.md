@@ -63,6 +63,8 @@ Run these inside Claude Code (in the prompt, not in your system shell).
 
 If you prefer menus, type `/plugin`, open **Marketplaces** to add `greenoceanplanet/bar-claude-meter`, then pick `bar-claude-meter` from **Discover**.
 
+Or just ask Claude: paste `Install the plugin from https://github.com/greenoceanplanet/bar-claude-meter` into Claude Code. It runs the same two steps for you; then restart Claude Code (or type `/reload-plugins`).
+
 > Mods run with the same access as Claude Code itself; they are not sandboxed. The source is short. Read [`hooks/register.tsx`](hooks/register.tsx) and [`hooks/meter.ts`](hooks/meter.ts) before installing if you like.
 
 ## Getting updates
