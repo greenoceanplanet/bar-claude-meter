@@ -41,6 +41,10 @@ On narrow terminals the line shortens itself: below 90 columns the numbers are h
 
 ## Install
 
+**Easiest: ask Claude.** Paste `Install the plugin from https://github.com/greenoceanplanet/bar-claude-meter` into Claude Code. It runs steps 1–2 below for you; then restart Claude Code (or type `/reload-plugins`).
+
+To do it yourself:
+
 Run these inside Claude Code (in the prompt, not in your system shell).
 
 **1. Add the marketplace.** This tells Claude Code where to find the mod.
@@ -62,8 +66,6 @@ Run these inside Claude Code (in the prompt, not in your system shell).
 **4. Send any message.** The bars appear once Claude has answered, because usage figures arrive with each response.
 
 If you prefer menus, type `/plugin`, open **Marketplaces** to add `greenoceanplanet/bar-claude-meter`, then pick `bar-claude-meter` from **Discover**.
-
-Or just ask Claude: paste `Install the plugin from https://github.com/greenoceanplanet/bar-claude-meter` into Claude Code. It runs the same two steps for you; then restart Claude Code (or type `/reload-plugins`).
 
 > Mods run with the same access as Claude Code itself; they are not sandboxed. The source is short. Read [`hooks/register.tsx`](hooks/register.tsx) and [`hooks/meter.ts`](hooks/meter.ts) before installing if you like.
 
